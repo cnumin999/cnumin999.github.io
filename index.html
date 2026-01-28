@@ -9,6 +9,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
+    :root {
+      --bg: linear-gradient(135deg, #cbe9f6, #e0f2ff, #d6e6ff);
+      --card: rgba(255,255,255,0.75);
+      --text: #1f2d3d;
+      --sub: #4a6fa5;
+      --accent: #4a90e2;
+    }
+
+    body.dark {
+      --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      --card: rgba(255,255,255,0.08);
+      --text: #f1f1f1;
+      --sub: #9cc9ff;
+      --accent: #00d4ff;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -17,13 +33,13 @@
     }
 
     body {
-      background: linear-gradient(135deg, #cbe9f6, #e0f2ff, #d6e6ff);
-      color: #1f2d3d;
-      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.5s, color 0.5s;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
       padding: 80px 20px;
     }
@@ -31,6 +47,7 @@
     header {
       text-align: center;
       margin-bottom: 100px;
+      position: relative;
     }
 
     header h1 {
@@ -40,29 +57,19 @@
 
     header p {
       font-size: 1.2rem;
-      color: #4a6fa5;
+      color: var(--sub);
       line-height: 1.7;
     }
 
-    .buttons {
-      margin-top: 30px;
-    }
-
-    .buttons a {
-      display: inline-block;
-      margin: 0 10px;
-      padding: 12px 22px;
-      border-radius: 30px;
-      background: #4a90e2;
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform 0.3s, background 0.3s;
-    }
-
-    .buttons a:hover {
-      transform: translateY(-4px);
-      background: #357abf;
+    .toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background: var(--card);
+      padding: 10px 14px;
+      border-radius: 50%;
     }
 
     section {
@@ -77,40 +84,54 @@
 
     .repos {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 26px;
     }
 
     .repo {
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 16px;
-      padding: 24px;
+      background: var(--card);
+      border-radius: 18px;
+      overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
       transition: transform 0.3s;
     }
 
     .repo:hover {
-      transform: translateY(-8px);
+      transform: translateY(-10px);
+    }
+
+    .thumb {
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .repo-content {
+      padding: 20px;
     }
 
     .repo a {
-      color: #357abf;
+      color: var(--accent);
       font-size: 1.1rem;
       font-weight: 700;
       text-decoration: none;
     }
 
     .repo p {
-      margin-top: 10px;
+      margin: 10px 0;
       font-size: 0.95rem;
-      color: #555;
-      line-height: 1.5;
+      color: var(--sub);
+    }
+
+    .stacks i {
+      margin-right: 8px;
+      font-size: 1.2rem;
     }
 
     footer {
       text-align: center;
       font-size: 0.85rem;
-      color: #777;
+      color: var(--sub);
     }
 
     /* 스크롤 애니메이션 */
@@ -130,63 +151,79 @@
 <body>
   <div class="container">
     <header class="reveal">
+      <div class="toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </div>
+
       <h1>cnumin999</h1>
       <p>
-        안녕하세요 👋<br />
-        작은 아이디어를 코드로 구현하는 걸 좋아하는 개발자입니다.<br />
-        기록하고, 만들고, 계속 성장 중입니다 🚀
+        작은 아이디어를 코드로 구현하는 개발자입니다.<br />
+        웹을 중심으로 계속 실험하고 기록하고 있습니다 🚀
       </p>
-
-      <div class="buttons">
-        <a href="https://github.com/cnumin999" target="_blank">
-          <i class="fab fa-github"></i> GitHub
-        </a>
-        <a href="mailto:your@email.com">
-          <i class="fas fa-envelope"></i> Contact
-        </a>
-      </div>
     </header>
 
     <section class="reveal">
       <h2>Projects</h2>
-      <div class="repos" id="repo-list">
-        <!-- GitHub API로 자동 채워짐 -->
-      </div>
+      <div class="repos" id="repo-list"></div>
     </section>
 
     <footer class="reveal">
-      © 2026 cnumin999 · Built with GitHub Pages
+      © 2026 cnumin999 · GitHub Pages
     </footer>
   </div>
 
   <script>
-    // GitHub 레포 자동 불러오기
+    const stackIcons = {
+      JavaScript: "fab fa-js",
+      HTML: "fab fa-html5",
+      CSS: "fab fa-css3-alt",
+      Python: "fab fa-python",
+      TypeScript: "fab fa-js",
+      Shell: "fas fa-terminal"
+    };
+
+    // 다크모드
+    const toggle = document.getElementById("themeToggle");
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") document.body.classList.add("dark");
+
+    toggle.onclick = () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem(
+        "theme",
+        document.body.classList.contains("dark") ? "dark" : "light"
+      );
+    };
+
+    // GitHub 레포 불러오기
     fetch("https://api.github.com/users/cnumin999/repos")
       .then(res => res.json())
       .then(data => {
         const container = document.getElementById("repo-list");
-        data
-          .filter(repo => !repo.fork)
-          .slice(0, 6)
-          .forEach(repo => {
-            const div = document.createElement("div");
-            div.className = "repo reveal";
-            div.innerHTML = `
+        data.filter(r => !r.fork).slice(0, 6).forEach(repo => {
+          const div = document.createElement("div");
+          div.className = "repo reveal";
+
+          const icon = stackIcons[repo.language] || "fas fa-code";
+
+          div.innerHTML = `
+            <div class="thumb" style="background-image:url('https://picsum.photos/500/300?random=${repo.id}')"></div>
+            <div class="repo-content">
               <a href="${repo.html_url}" target="_blank">${repo.name}</a>
-              <p>${repo.description || "프로젝트 설명이 아직 없습니다."}</p>
-            `;
-            container.appendChild(div);
-          });
+              <p>${repo.description || "프로젝트 설명이 없습니다."}</p>
+              <div class="stacks">
+                <i class="${icon}"></i> ${repo.language || "etc"}
+              </div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
         revealOnScroll();
       });
 
-    // 스크롤 애니메이션
     function revealOnScroll() {
-      const reveals = document.querySelectorAll(".reveal");
-      reveals.forEach(el => {
-        const windowHeight = window.innerHeight;
-        const elementTop = el.getBoundingClientRect().top;
-        if (elementTop < windowHeight - 100) {
+      document.querySelectorAll(".reveal").forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100) {
           el.classList.add("active");
         }
       });
