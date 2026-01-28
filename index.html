@@ -156,6 +156,17 @@ footer {
   z-index: 2;
 }
 
+/* Contact & Languages */
+.contact-links a, .languages i {
+  margin: 0 10px;
+  font-size: 1.5rem;
+  color: var(--accent);
+  transition: transform 0.2s;
+}
+.contact-links a:hover, .languages i:hover {
+  transform: scale(1.2);
+}
+
 /* 스크롤 애니메이션 */
 .reveal {
   opacity: 0;
@@ -191,27 +202,54 @@ footer {
     <p>작은 아이디어를 코드로 구현하는 개발자입니다.<br>웹을 중심으로 계속 실험하고 기록하고 있습니다 🚀</p>
   </header>
 
+  <!-- Projects -->
   <section class="reveal">
     <h2>Projects</h2>
     <div class="repos" id="repo-list"></div>
   </section>
 
+  <!-- GitHub Stats -->
   <section class="reveal">
     <h2>GitHub Stats</h2>
     <div class="repos" id="stats-list"></div>
+  </section>
+
+  <!-- Languages / Skills -->
+  <section class="reveal">
+    <h2>Languages & Skills</h2>
+    <div class="languages" style="text-align:center; margin-top:20px;">
+      <i class="fab fa-html5" title="HTML"></i>
+      <i class="fab fa-css3-alt" title="CSS"></i>
+      <i class="fab fa-js" title="JavaScript"></i>
+      <i class="fab fa-python" title="Python"></i>
+      <i class="fab fa-node-js" title="Node.js"></i>
+      <i class="fas fa-terminal" title="Shell"></i>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="reveal">
+    <h2>Contact</h2>
+    <div class="contact-links" style="text-align:center; margin-top:20px;">
+      <a href="mailto:youremail@example.com" title="Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://github.com/cnumin999" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+    </div>
   </section>
 
   <footer class="reveal">© 2026 cnumin999 · GitHub Pages</footer>
 </div>
 
 <script>
+// 언어별 아이콘
 const stackIcons = {
   JavaScript:"fab fa-js",
   HTML:"fab fa-html5",
   CSS:"fab fa-css3-alt",
   Python:"fab fa-python",
   TypeScript:"fab fa-js",
-  Shell:"fas fa-terminal"
+  Shell:"fas fa-terminal",
+  Node:"fab fa-node-js"
 };
 
 // 다크모드
