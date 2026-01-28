@@ -71,7 +71,7 @@ footer{text-align:center;color:var(--sub);margin-top:60px;font-size:0.85rem;}
 <div class="container">
   <header class="reveal">
     <h1>cnumin999</h1>
-    <p>작은 아이디어를 코드로 구현하는 개발자입니다.<br>웹 중심 프로젝트 실험과 기록을 즐깁니다! 🚀</p>
+    <p>작은 아이디어를 코드로 구현하는 개발자입니다.<br>웹 중심 프로젝트 실험과 기록을 즐깁니다 🚀</p>
     <div class="buttons">
       <a href="https://github.com/cnumin999" target="_blank"><i class="fab fa-github"></i> GitHub</a>
       <a href="mailto:your@email.com"><i class="fas fa-envelope"></i> Email</a>
@@ -211,12 +211,13 @@ function createRepoCard(repo){
 }
 
 fetch("https://api.github.com/users/cnumin999/repos")
-.then(res=>res.json())
-.then(data=>{
-  reposData = data.filter(r=>!r.fork && !r.private).slice(0,12);
-  displayRepos("All");
-})
-.catch(err=>console.error("GitHub API 에러:",err));
+  .then(res => res.json())
+  .then(data => {
+    // 공개 레포 모두 가져오기 (fork 포함)
+    reposData = data.filter(r => !r.private).slice(0, 12);
+    displayRepos("All");
+  })
+  .catch(err => console.error("GitHub API 에러:", err));
 
 function displayRepos(lang){
   const container=document.getElementById("repo-list");
