@@ -5,7 +5,6 @@
   <title>cnumin999 | Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- 폰트 & 아이콘 -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -17,7 +16,6 @@
       --sub: #4a6fa5;
       --accent: #4a90e2;
     }
-
     body.dark {
       --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       --card: rgba(255,255,255,0.08);
@@ -25,71 +23,52 @@
       --sub: #9cc9ff;
       --accent: #00d4ff;
     }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
+    body{background:var(--bg);color:var(--text);transition:background 0.5s,color 0.5s;}
+    a{text-decoration:none;color:inherit;}
+    .container{max-width:1200px;margin:auto;padding:60px 20px;}
+    .toggle{position:fixed;top:20px;right:20px;font-size:1.4rem;cursor:pointer;background:var(--card);padding:10px 14px;border-radius:50%;z-index:10;}
 
-    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Roboto', sans-serif;}
-    body { background: var(--bg); color: var(--text); transition: background 0.5s, color 0.5s;}
-    a { text-decoration: none; color: inherit; }
+    header{text-align:center;padding:100px 0;position:relative;overflow:hidden;}
+    header h1{font-size:3.5rem;margin-bottom:16px;}
+    header p{font-size:1.3rem;color:var(--sub);line-height:1.7;max-width:700px;margin:auto;}
+    header canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;}
+    .buttons{margin-top:30px;}
+    .buttons a{display:inline-block;margin:0 10px;padding:12px 24px;border-radius:30px;background:var(--accent);color:#fff;font-weight:600;transition:0.3s;}
+    .buttons a:hover{transform:translateY(-4px);background:#357abf;}
+    section{margin-bottom:100px;}
+    h2{font-size:2rem;margin-bottom:40px;text-align:center;}
 
-    .container { max-width: 1200px; margin: auto; padding: 60px 20px; }
+    .repos{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;}
+    .repo{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.08);transition:transform 0.3s;cursor:pointer;}
+    .repo:hover{transform:translateY(-10px);}
+    .thumb{height:180px;background-size:cover;background-position:center;transition: transform 0.5s;}
+    .repo:hover .thumb{transform:scale(1.05);}
+    .repo-content{padding:20px;}
+    .repo a{font-size:1.2rem;font-weight:700;color:var(--accent);}
+    .repo p{margin:10px 0;font-size:0.95rem;color:var(--sub);}
+    .stacks i{margin-right:8px;font-size:1.2rem;}
 
-    /* 다크모드 토글 */
-    .toggle { position: fixed; top: 20px; right: 20px; font-size: 1.4rem; cursor: pointer; background: var(--card); padding:10px 14px; border-radius:50%; z-index:10; }
+    .skills{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+    .skill{background:var(--card);padding:15px 20px;border-radius:12px;font-weight:600;display:flex;align-items:center;gap:10px;transition:0.3s;}
+    .skill i{font-size:1.4rem;}
+    .skill:hover{transform:translateY(-6px);}
 
-    /* Hero 영역 */
-    header { text-align: center; padding: 100px 0; position: relative; overflow:hidden;}
-    header h1 { font-size: 3.5rem; margin-bottom:16px; }
-    header p { font-size:1.3rem; color: var(--sub); line-height:1.7; max-width:700px; margin:auto; }
-    header canvas { position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; }
+    .contact{text-align:center;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+    .contact a{display:inline-block;font-size:1.3rem;padding:12px 18px;background: var(--accent); color:#fff;border-radius:12px;transition:0.3s;}
+    .contact a:hover{transform:translateY(-4px);background:#357abf;}
+    footer{text-align:center;color:var(--sub);margin-top:60px;font-size:0.85rem;}
 
-    /* Buttons */
-    .buttons { margin-top:30px; }
-    .buttons a { display:inline-block; margin:0 10px; padding:12px 24px; border-radius:30px; background:var(--accent); color:#fff; font-weight:600; transition:0.3s; }
-    .buttons a:hover { transform:translateY(-4px); background:#357abf; }
-
-    /* 섹션 */
-    section { margin-bottom:100px; }
-    h2 { font-size:2rem; margin-bottom:40px; text-align:center; }
-
-    /* 프로젝트 카드 */
-    .repos { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:30px; }
-    .repo { background: var(--card); border-radius:18px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.08); transition: transform 0.3s; cursor:pointer;}
-    .repo:hover { transform:translateY(-10px);}
-    .thumb { height:180px; background-size:cover; background-position:center; transition: transform 0.5s;}
-    .repo:hover .thumb { transform: scale(1.05); }
-    .repo-content { padding:20px; }
-    .repo a { font-size:1.2rem; font-weight:700; color:var(--accent);}
-    .repo p { margin:10px 0; font-size:0.95rem; color:var(--sub);}
-    .stacks i { margin-right:8px; font-size:1.2rem; }
-
-    /* 기술 스택 섹션 */
-    .skills { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; }
-    .skill { background: var(--card); padding:15px 20px; border-radius:12px; font-weight:600; display:flex; align-items:center; gap:10px; transition:0.3s;}
-    .skill i { font-size:1.4rem; }
-    .skill:hover { transform:translateY(-6px); }
-
-    /* Contact */
-    .contact { text-align:center; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
-    .contact a { display:inline-block; font-size:1.3rem; padding:12px 18px; background: var(--accent); color:#fff; border-radius:12px; transition:0.3s;}
-    .contact a:hover { transform:translateY(-4px); background:#357abf;}
-
-    /* Footer */
-    footer { text-align:center; color: var(--sub); margin-top:60px; font-size:0.85rem;}
-
-    /* 스크롤 애니메이션 */
-    .reveal { opacity:0; transform:translateY(40px); transition: all 0.8s ease;}
-    .reveal.active { opacity:1; transform:translateY(0);}
+    .reveal{opacity:0;transform:translateY(40px);transition: all 0.8s ease;}
+    .reveal.active{opacity:1;transform:translateY(0);}
   </style>
 </head>
-
 <body>
   <div class="toggle" id="themeToggle"><i class="fas fa-moon"></i></div>
-
   <div class="container">
-    <!-- Hero -->
     <header class="reveal">
       <h1>cnumin999</h1>
-      <p>작은 아이디어를 코드로 구현하는 개발자입니다.<br>
-         웹 중심 프로젝트 실험과 기록을 즐깁니다 🚀</p>
+      <p>작은 아이디어를 코드로 구현하는 개발자입니다.<br>웹 중심 프로젝트 실험과 기록을 즐깁니다 🚀</p>
       <div class="buttons">
         <a href="https://github.com/cnumin999" target="_blank"><i class="fab fa-github"></i> GitHub</a>
         <a href="mailto:your@email.com"><i class="fas fa-envelope"></i> Contact</a>
@@ -97,13 +76,11 @@
       <canvas id="heroCanvas"></canvas>
     </header>
 
-    <!-- Projects -->
     <section class="reveal">
       <h2>Projects</h2>
       <div class="repos" id="repo-list"></div>
     </section>
 
-    <!-- Skills -->
     <section class="reveal">
       <h2>Skills</h2>
       <div class="skills">
@@ -116,7 +93,6 @@
       </div>
     </section>
 
-    <!-- Contact -->
     <section class="reveal">
       <h2>Contact</h2>
       <div class="contact">
@@ -126,7 +102,6 @@
         <a href="#"><i class="fab fa-telegram"></i> Kakao</a>
       </div>
     </section>
-
     <footer class="reveal">© 2026 cnumin999 · GitHub Pages</footer>
   </div>
 
@@ -139,32 +114,28 @@
       localStorage.setItem("theme", document.body.classList.contains("dark")?"dark":"light");
     };
 
-    // 샘플 프로젝트 데이터 (Private 레포 상관없이 바로 화면에 표시)
-    const mockRepos = [
-      {id:1,name:"Demo Project 1",description:"웹페이지 제작 실습",language:"HTML",html_url:"#"},
-      {id:2,name:"Demo Project 2",description:"JS 애니메이션 예제",language:"JavaScript",html_url:"#"},
-      {id:3,name:"Demo Project 3",description:"CSS 스타일링",language:"CSS",html_url:"#"},
-      {id:4,name:"Demo Project 4",description:"React 앱 제작",language:"JavaScript",html_url:"#"},
-      {id:5,name:"Demo Project 5",description:"Python 데이터 처리",language:"Python",html_url:"#"},
-      {id:6,name:"Demo Project 6",description:"Git 사용법 정리",language:"Shell",html_url:"#"}
-    ];
-
+    // GitHub Public 레포 자동 불러오기
     const stackIcons = {JavaScript:"fab fa-js", HTML:"fab fa-html5", CSS:"fab fa-css3-alt", Python:"fab fa-python", TypeScript:"fab fa-js", Shell:"fas fa-terminal"};
-
-    const container = document.getElementById("repo-list");
-    mockRepos.forEach(repo=>{
-      const div = document.createElement("div"); div.className="repo reveal";
-      const icon = stackIcons[repo.language]||"fas fa-code";
-      div.innerHTML=`
-        <div class="thumb" style="background-image:url('https://picsum.photos/500/300?random=${repo.id}')"></div>
-        <div class="repo-content">
-          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
-          <p>${repo.description}</p>
-          <div class="stacks"><i class="${icon}"></i>${repo.language}</div>
-        </div>
-      `;
-      container.appendChild(div);
-    });
+    fetch("https://api.github.com/users/cnumin999/repos")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("repo-list");
+        data.filter(r=>!r.fork && r.private===false).slice(0,6).forEach(repo => {
+          const div = document.createElement("div");
+          div.className = "repo reveal";
+          const icon = stackIcons[repo.language]||"fas fa-code";
+          div.innerHTML=`
+            <div class="thumb" style="background-image:url('https://picsum.photos/500/300?random=${repo.id}')"></div>
+            <div class="repo-content">
+              <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+              <p>${repo.description||"설명 없음"}</p>
+              <div class="stacks"><i class="${icon}"></i>${repo.language||"etc"}</div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+        revealOnScroll();
+      });
 
     // 스크롤 애니메이션
     function revealOnScroll(){ document.querySelectorAll(".reveal").forEach(el=>{ if(el.getBoundingClientRect().top<window.innerHeight-100) el.classList.add("active"); }); }
