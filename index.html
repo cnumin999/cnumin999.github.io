@@ -139,38 +139,57 @@
       localStorage.setItem("theme", document.body.classList.contains("dark")?"dark":"light");
     };
 
-    // GitHub 레포 불러오기
+    // 샘플 프로젝트 데이터 (Private 레포 상관없이 바로 화면에 표시)
+    const mockRepos = [
+      {id:1,name:"Demo Project 1",description:"웹페이지 제작 실습",language:"HTML",html_url:"#"},
+      {id:2,name:"Demo Project 2",description:"JS 애니메이션 예제",language:"JavaScript",html_url:"#"},
+      {id:3,name:"Demo Project 3",description:"CSS 스타일링",language:"CSS",html_url:"#"},
+      {id:4,name:"Demo Project 4",description:"React 앱 제작",language:"JavaScript",html_url:"#"},
+      {id:5,name:"Demo Project 5",description:"Python 데이터 처리",language:"Python",html_url:"#"},
+      {id:6,name:"Demo Project 6",description:"Git 사용법 정리",language:"Shell",html_url:"#"}
+    ];
+
     const stackIcons = {JavaScript:"fab fa-js", HTML:"fab fa-html5", CSS:"fab fa-css3-alt", Python:"fab fa-python", TypeScript:"fab fa-js", Shell:"fas fa-terminal"};
-    fetch("https://api.github.com/users/cnumin999/repos")
-      .then(res=>res.json())
-      .then(data=>{
-        const container = document.getElementById("repo-list");
-        data.filter(r=>!r.fork).slice(0,6).forEach(repo=>{
-          const div = document.createElement("div"); div.className="repo reveal";
-          const icon=stackIcons[repo.language]||"fas fa-code";
-          div.innerHTML=`
-            <div class="thumb" style="background-image:url('https://picsum.photos/500/300?random=${repo.id}')"></div>
-            <div class="repo-content">
-              <a href="${repo.html_url}" target="_blank">${repo.name}</a>
-              <p>${repo.description||"프로젝트 설명 없음"}</p>
-              <div class="stacks"><i class="${icon}"></i>${repo.language||"etc"}</div>
-            </div>
-          `;
-          container.appendChild(div);
-        });
-        revealOnScroll();
-      });
+
+    const container = document.getElementById("repo-list");
+    mockRepos.forEach(repo=>{
+      const div = document.createElement("div"); div.className="repo reveal";
+      const icon = stackIcons[repo.language]||"fas fa-code";
+      div.innerHTML=`
+        <div class="thumb" style="background-image:url('https://picsum.photos/500/300?random=${repo.id}')"></div>
+        <div class="repo-content">
+          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+          <p>${repo.description}</p>
+          <div class="stacks"><i class="${icon}"></i>${repo.language}</div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
 
     // 스크롤 애니메이션
     function revealOnScroll(){ document.querySelectorAll(".reveal").forEach(el=>{ if(el.getBoundingClientRect().top<window.innerHeight-100) el.classList.add("active"); }); }
     window.addEventListener("scroll",revealOnScroll);
     revealOnScroll();
 
-    // Hero Canvas 애니메이션
-    const canvas=document.getElementById("heroCanvas"), ctx=canvas.getContext("2d"); canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-    let stars=[]; for(let i=0;i<100;i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.2+0.3,speed:Math.random()*0.5+0.2}));
-    function animateStars(){ ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s=>{ s.y-=s.speed; if(s.y<0) s.y=canvas.height; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle="#fff"; ctx.fill(); }); requestAnimationFrame(animateStars);}
-    animateStars(); window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
+    // Hero Canvas 별 애니메이션
+    const canvas=document.getElementById("heroCanvas"), ctx=canvas.getContext("2d"); 
+    canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+    let stars=[]; 
+    for(let i=0;i<100;i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.2+0.3,speed:Math.random()*0.5+0.2});
+    function animateStars(){ 
+      ctx.clearRect(0,0,canvas.width,canvas.height); 
+      stars.forEach(s=>{ 
+        s.y-=s.speed; 
+        if(s.y<0) s.y=canvas.height; 
+        ctx.beginPath(); 
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2); 
+        ctx.fillStyle="#fff"; 
+        ctx.fill(); 
+      }); 
+      requestAnimationFrame(animateStars);
+    }
+    animateStars(); 
+    window.addEventListener("resize",()=>{canvas.width=window.innerWidth; canvas.height=window.innerHeight;});
   </script>
 </body>
 </html>
