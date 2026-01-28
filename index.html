@@ -124,93 +124,85 @@ if(localStorage.getItem("theme") === "dark") document.body.classList.add("dark")
 
 let isDark = document.body.classList.contains("dark");
 
-// Canvas 애니메이션 (별/구름)
+// ================= Canvas 업그레이드 =================
 const canvas = document.getElementById("heroCanvas"), ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 let particles = [];
+let isDark = document.body.classList.contains("dark");
 
 function initParticles() {
   particles = [];
   if(isDark){
-    for(let i=0;i<100;i++) particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.2+0.3,speed:Math.random()*0.5+0.2});
+    // 별
+    for(let i=0;i<120;i++){
+      particles.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*1.2+0.3,
+        speed: Math.random()*0.5+0.2,
+        alpha: Math.random() // 깜빡임
+      });
+    }
   } else {
-    for(let i=0;i<20;i++) particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height/2,r:Math.random()*80+50,speed:Math.random()*0.3+0.1});
+    // 구름
+    for(let i=0;i<25;i++){
+      particles.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*(canvas.height/2),
+        r: Math.random()*100+60,
+        speed: Math.random()*0.2+0.05,
+        offset: Math.random()*Math.PI*2 // y sin 변위
+      });
+    }
   }
 }
 
 function animateParticles(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(isDark){
-    particles.forEach(p=>{p.y-=p.speed;if(p.y<0)p.y=canvas.height;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();});
+    // 별 반짝
+    particles.forEach(p=>{
+      p.alpha += (Math.random()-0.5)*0.05;
+      if(p.alpha>1)p.alpha=1; if(p.alpha<0)p.alpha=0;
+      p.y -= p.speed;
+      if(p.y<0)p.y=canvas.height;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+      ctx.fill();
+    });
   } else {
-    particles.forEach(p=>{p.x+=p.speed;if(p.x>canvas.width)p.x=-p.r*2;ctx.beginPath();ctx.ellipse(p.x,p.y,p.r*1.5,p.r,0,0,Math.PI*2);ctx.fillStyle="rgba(255,255,255,0.3)";ctx.fill();});
+    // 구름 자연스럽게
+    particles.forEach(p=>{
+      p.x += p.speed;
+      p.y += Math.sin(p.x/200+p.offset)*0.3; // 살짝 곡선
+      if(p.x>canvas.width+p.r)p.x=-p.r*2;
+      ctx.beginPath();
+      ctx.ellipse(p.x,p.y,p.r*1.5,p.r,0,0,Math.PI*2);
+      ctx.fillStyle = "rgba(255,255,255,0.25)";
+      ctx.fill();
+    });
   }
   requestAnimationFrame(animateParticles);
 }
 
-// 토글
+// 다크모드 토글
+const toggle = document.getElementById("themeToggle");
 toggle.onclick = () => {
   document.body.classList.toggle("dark");
   isDark = document.body.classList.contains("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
+  localStorage.setItem("theme", isDark?"dark":"light");
   initParticles();
 }
-
-// GitHub Projects
-const stackIcons = {JavaScript:"fab fa-js", HTML:"fab fa-html5", CSS:"fab fa-css3-alt", Python:"fab fa-python", TypeScript:"fab fa-js", Shell:"fas fa-terminal", React:"fab fa-react"};
-let reposData = [];
-function createRepoCard(repo){
-  const div=document.createElement("div"); div.className="repo reveal";
-  const icon = stackIcons[repo.language] || "fas fa-code";
-  div.innerHTML = `<div class="repo-inner">
-      <div class="repo-front">
-        <div class="thumb" style="background-image:url('https://picsum.photos/500/300?random=${repo.id}')"></div>
-        <div class="repo-content">
-          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
-          <p>${repo.description||"설명 없음"}</p>
-          <div class="stacks"><i class="${icon}"></i>${repo.language||"etc"}</div>
-        </div>
-      </div>
-      <div class="repo-back">
-        <a href="${repo.html_url}" target="_blank" style="color:var(--accent);font-weight:bold;"><i class="fab fa-github"></i> GitHub</a>
-        <p style="margin-top:10px;">${repo.description||"설명 없음"}</p>
-        <div class="stacks"><i class="${icon}"></i>${repo.language||"etc"}</div>
-      </div>
-    </div>`;
-  return div;
-}
-
-fetch("https://api.github.com/users/cnumin999/repos")
-.then(res=>res.json())
-.then(data=>{reposData = data.filter(r=>!r.fork && r.private===false).slice(0,12); displayRepos("All");});
-
-function displayRepos(lang){
-  const container=document.getElementById("repo-list");
-  container.innerHTML="";
-  reposData.forEach(repo=>{
-    if(lang==="All"||repo.language===lang) container.appendChild(createRepoCard(repo));
-  });
-  revealOnScroll();
-}
-
-document.querySelectorAll(".filters button").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    displayRepos(btn.dataset.lang);
-  });
-});
-
-// Scroll Reveal
-function revealOnScroll(){ document.querySelectorAll(".reveal").forEach(el=>{ if(el.getBoundingClientRect().top<window.innerHeight-100) el.classList.add("active"); }); }
-window.addEventListener("scroll",revealOnScroll); revealOnScroll();
 
 // 초기화
 initParticles();
 animateParticles();
 
 // Resize 대응
-window.addEventListener("resize",()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;initParticles();});
-</script>
-</body>
-</html>
+window.addEventListener("resize",()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  initParticles();
+});
