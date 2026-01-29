@@ -23,20 +23,6 @@ body.dark {
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
 body{background:var(--bg);color:var(--text);transition:background 0.5s,color 0.5s;overflow-x:hidden;}
-/* 커스텀 커서 기본 스타일 */
-.custom-cursor {
-  width: 20px;
-  height: 20px;
-  background: var(--accent);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transition: transform 0.15s ease-out;
-  transform: translate(-50%, -50%);
-}
-.custom-cursor.grow { transform: translate(-50%, -50%) scale(2.5); background: #fff; }
 
 .container{max-width:1100px;margin:auto;padding:80px 20px;position:relative;z-index:2;}
 header{text-align:center;margin-bottom:100px;position:relative;z-index:2;}
@@ -97,7 +83,6 @@ h2{font-size:2rem;margin-bottom:40px;text-align:center;}
 
 /* 모바일 전용 */
 @media (max-width: 768px) {
-  .custom-cursor { display: none; } /* 모바일에서는 커스텀 커서 숨김 */
   .container{padding:50px 15px;}
   header h1{font-size:2rem;}
   header p{font-size:1rem;}
@@ -115,7 +100,6 @@ h2{font-size:2rem;margin-bottom:40px;text-align:center;}
 </style>
 </head>
 <body>
-<div class="custom-cursor" id="cursor"></div>
 <canvas id="heroCanvas"></canvas>
 <div class="container">
   <header>
@@ -172,21 +156,6 @@ h2{font-size:2rem;margin-bottom:40px;text-align:center;}
 </div>
 
 <script>
-// Custom Cursor logic
-const cursor = document.getElementById("cursor");
-document.addEventListener("mousemove", (e) => {
-  cursor.style.left = e.clientX + "px";
-  cursor.style.top = e.clientY + "px";
-});
-
-function updateCursorInteractions() {
-  const interactables = document.querySelectorAll('a, .skill, .contact-item, .toggle');
-  interactables.forEach(el => {
-    el.addEventListener("mouseenter", () => cursor.classList.add("grow"));
-    el.addEventListener("mouseleave", () => cursor.classList.remove("grow"));
-  });
-}
-
 // Dark Mode toggle
 const toggle = document.getElementById("themeToggle");
 let isDark = localStorage.getItem("theme") === "dark";
@@ -242,7 +211,6 @@ fetch("https://api.github.com/users/cnumin999/repos")
 .then(data=>{
   reposData=data.filter(r=>!r.fork && r.private===false).slice(0,12);
   displayRepos("All");
-  updateCursorInteractions(); // 레포 로드 후 커서 이벤트 갱신
 });
 
 function displayRepos(lang){
@@ -298,7 +266,6 @@ function animateParticles(){
 }
 initParticles(); animateParticles();
 window.addEventListener("resize",()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;initParticles();});
-updateCursorInteractions(); // 초기 로드 시 커서 이벤트 등록
 </script>
 </body>
 </html>
