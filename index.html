@@ -120,6 +120,8 @@ h2{font-size:2rem;margin-bottom:30px;text-align:center;}
       <div class="skill" title="Python"><div class="icon"><i class="fab fa-python"></i></div><span>Python</span></div>
       <div class="skill" title="React"><div class="icon"><i class="fab fa-react"></i></div><span>React</span></div>
       <div class="skill" title="Shell"><div class="icon"><i class="fas fa-terminal"></i></div><span>Shell</span></div>
+      <div class="skill" title="C"><div class="icon"><i class="fas fa-code"></i></div><span>C</span></div>
+      <div class="skill" title="Java"><div class="icon"><i class="fab fa-java"></i></div><span>Java</span></div>
     </div>
   </section>
 
@@ -158,7 +160,8 @@ function revealOnScroll(){document.querySelectorAll(".reveal").forEach(el=>{if(e
 window.addEventListener("scroll",revealOnScroll); revealOnScroll();
 
 // GitHub Repos
-const stackIcons={JavaScript:"fab fa-js",HTML:"fab fa-html5",CSS:"fab fa-css3-alt",Python:"fab fa-python",TypeScript:"fab fa-js",Shell:"fas fa-terminal",React:"fab fa-react"};
+const stackIcons={JavaScript:"fab fa-js",HTML:"fab fa-html5",CSS:"fab fa-css3-alt",Python:"fab fa-python",TypeScript:"fab fa-js",Shell:"fas fa-terminal",React:"fab fa-react",C:"fas fa-code",
+  Java:"fab fa-java"};
 let reposData=[];
 function createRepoCard(repo){
   const div=document.createElement("div"); div.className="repo reveal";
