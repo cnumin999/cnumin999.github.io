@@ -25,12 +25,12 @@ body{background:var(--bg);color:var(--text);transition:background 0.5s,color 0.5
 .container{max-width:1100px;margin:auto;padding:80px 20px;position:relative;z-index:2;}
 header{text-align:center;margin-bottom:100px;position:relative;z-index:2;}
 header h1{font-size:3rem;margin-bottom:16px;display:inline-block;}
-header p{font-size:1.2rem;color:var(--sub);line-height:1.7;margin-top:10px;}
+header p{font-family: monospace; font-size:1.2rem;color:var(--sub);line-height:1.7;margin-top:10px;}
 .toggle{position:absolute;top:20px;right:20px;font-size:1.2rem;cursor:pointer;background:var(--card);padding:10px 14px;border-radius:50%;z-index:10;}
 
-/* Typing animation */
-.typewriter { font-family: monospace; display:inline-block; border-right: 3px solid var(--accent); white-space: nowrap; overflow: hidden; animation: blink 0.7s infinite; }
-@keyframes blink { 0%,50%,100%{border-color:var(--accent);} 25%,75%{border-color:transparent;} }
+/* Typing cursor 멈춤 후 고정 */
+.typewriter { display:inline-block; border-right: 3px solid var(--accent); white-space: nowrap; overflow: hidden; }
+.typewriter.finished { border-right: none; }
 
 /* Projects */
 section{margin-bottom:120px;position:relative;z-index:2;}
@@ -165,6 +165,8 @@ function type() {
     typewriterEl.textContent += text[idx];
     idx++;
     setTimeout(type, 200); // 글자별 속도
+  } else {
+    typewriterEl.classList.add("finished"); // 커서 깜빡임 멈춤
   }
 }
 type();
@@ -228,7 +230,7 @@ function animateParticles(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach(p=>{
     if(isDark){
-      p.alpha+=(Math.random()-0.5)*0.05;
+      p.alpha+=(Math.random()-0.5)*0.02;
       p.alpha=Math.min(Math.max(p.alpha,0),1);
       p.y-=p.speed;
       if(p.y<0)p.y=canvas.height;
@@ -238,11 +240,11 @@ function animateParticles(){
       ctx.fill();
     }else{
       p.x+=p.speed;
-      p.y+=Math.sin(p.x/200+p.offset)*0.3;
+      p.y+=Math.sin(p.x/200+p.offset)*0.2;
       if(p.x>canvas.width+p.r)p.x=-p.r*2;
       ctx.beginPath();
       ctx.ellipse(p.x,p.y,p.r*1.5,p.r,0,0,Math.PI*2);
-      ctx.fillStyle="rgba(255,255,255,0.25)";
+      ctx.fillStyle="rgba(255,255,255,0.15)";
       ctx.fill();
     }
   });
