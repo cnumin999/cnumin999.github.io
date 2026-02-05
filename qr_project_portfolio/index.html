@@ -461,7 +461,7 @@
     theme: "dark"
   });
 </script>
-
+<script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div class="container">
@@ -859,32 +859,66 @@ flowchart TB
 
 
         <!-- 6. 최종 목표 -->
-        <div class="goal-section">
-            <h2 class="goal-title">프로젝트 최종 목표</h2>
-            <div class="goal-items">
-                <div class="goal-item">
-                    <div class="goal-icon">&#128202;</div>
-                    <div class="goal-text">데이터 축적<br><small>생산/QC/피드백 데이터 DB화</small></div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">&#128269;</div>
-                    <div class="goal-text">추적성 확보<br><small>제품 전 과정 이력 관리</small></div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">&#128276;</div>
-                    <div class="goal-text">사전 알림<br><small>교체주기 도래 시 알림</small></div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">&#128200;</div>
-                    <div class="goal-text">패턴 분석<br><small>불량 원인 추적 및 예측</small></div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">&#127970;</div>
-                    <div class="goal-text">플랫폼 사업화<br><small>데이터/기술 수수료 비즈니스</small></div>
-                </div>
-            </div>
-        </div>
+<div class="goal-section">
+  <h2 class="goal-title">프로젝트 최종 목표</h2>
+  <div class="goal-items">
 
+    <div class="goal-item">
+      <div class="goal-icon">
+        <i data-lucide="database"></i>
+      </div>
+      <div class="goal-text">
+        데이터 축적<br>
+        <small>생산/QC/피드백 데이터 DB화</small>
+      </div>
     </div>
+
+    <div class="goal-item">
+      <div class="goal-icon">
+        <i data-lucide="git-branch"></i>
+      </div>
+      <div class="goal-text">
+        추적성 확보<br>
+        <small>제품 전 과정 이력 관리</small>
+      </div>
+    </div>
+
+    <div class="goal-item">
+      <div class="goal-icon">
+        <i data-lucide="bell"></i>
+      </div>
+      <div class="goal-text">
+        사전 알림<br>
+        <small>교체주기 도래 시 알림</small>
+      </div>
+    </div>
+
+    <div class="goal-item">
+      <div class="goal-icon">
+        <i data-lucide="line-chart"></i>
+      </div>
+      <div class="goal-text">
+        패턴 분석<br>
+        <small>불량 원인 추적 및 예측</small>
+      </div>
+    </div>
+
+    <div class="goal-item">
+      <div class="goal-icon">
+        <i data-lucide="layers"></i>
+      </div>
+      <div class="goal-text">
+        플랫폼 사업화<br>
+        <small>데이터/기술 수수료 비즈니스</small>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </body>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>  
 </html>
