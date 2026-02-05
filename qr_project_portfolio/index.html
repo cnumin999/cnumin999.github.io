@@ -454,6 +454,129 @@
                 border: 1px solid #ddd;
             }
         }
+
+        @media (max-width: 768px) {
+
+  body {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+  }
+
+  /* 아키텍처 */
+  .arch-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .arrow {
+    transform: rotate(90deg);
+    font-size: 1.5rem;
+  }
+
+  .arch-box {
+    width: 100%;
+    padding: 20px;
+  }
+
+  /* 프로세스 카드 */
+  .process-card {
+    padding: 20px;
+  }
+
+  .process-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .process-title {
+    font-size: 1.1rem;
+  }
+
+  .process-purpose {
+    font-size: 0.85rem;
+  }
+
+  /* 플로우 스텝 */
+  .flow-step {
+    gap: 15px;
+    padding-left: 25px;
+  }
+
+  .step-content {
+    padding: 12px 15px;
+  }
+
+  .step-text {
+    font-size: 0.9rem;
+  }
+
+  .step-detail {
+    font-size: 0.75rem;
+  }
+
+  /* DB 테이블 */
+  .table-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* API */
+  .api-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .api-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .api-desc {
+    margin-left: 0;
+  }
+
+  /* Mermaid */
+  .mermaid {
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  /* 최종 목표 */
+  .goal-section {
+    padding: 25px 20px;
+  }
+
+  .goal-title {
+    font-size: 1.5rem;
+  }
+
+  .goal-items {
+    gap: 25px;
+  }
+
+  .goal-item {
+    width: 100%;
+  }
+
+  .goal-icon {
+    font-size: 2.5rem;
+  }
+
+  .goal-text {
+    font-size: 0.95rem;
+  }
+}
+
+
+        
     </style>
 <!-- Mermaid JS -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
