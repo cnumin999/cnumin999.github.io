@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -449,6 +450,9 @@
     </style>
 </head>
 <body>
+    <p class="subtitle">
+        요약: 생산 → QC → QR → 고객 → 데이터 분석 → 플랫폼 가치 창출
+    </p>
     <div class="container">
         <h1>QR 프로젝트 데이터 흐름도</h1>
         <p class="subtitle">QR 코드 기반 제품 추적 및 데이터 수집 플랫폼 시스템 아키텍처</p>
@@ -882,33 +886,29 @@
     </div>
 
     <script>
-        function copyMermaidCode() {
-            const code = `graph TD
-    %% 사용자 정의
-    User[사용자/관리자]
-    
-    %% 시스템 구성요소
-    Web[웹 클라이언트]
-    Server[Node.js 서버]
-    DB[(MySQL 데이터베이스)]
-    Python[Python 분석기]
+       ---
+config:
+  theme: default
+  layout: fixed
+  look: neo
+---
+flowchart TB
+    Start(("1. 제품 생산 시작")) --> Admin["관리자: 제품 정보 입력"]
+    Admin -- 생성 요청 --> Server1["서버: 시리얼 번호 생성"]
+    Server1 -- 데이터 저장 --> DB[("데이터베이스")]
+    DB -.-> Inspector["QC 검사자: 성적서 입력"] & Customer["고객: QR 코드 스캔"]
+    Inspector -- 리포트 저장 --> Server2["서버: QC 데이터 연동"]
+    Server2 -- 업데이트 --> DB
+    Customer -- 접속 --> Server3["서버: 위치/로그 기록"]
+    Server3 -- 이력 조회 --> DB
+    DB -- 정보 반환 --> Page["모바일: 상세 페이지 출력"]
+    Page --> Feedback["고객: 피드백 제출"]
+    Feedback -- 전송 --> Server4["서버: 피드백 접수"]
+    Server4 -- 자동 실행 --> Python["파이썬: 텍스트 분석"]
+    Python -- 결과 저장 --> DB
 
-    %% 흐름 1: 생산/QC
-    User -->|1. 생산/QC 데이터 입력| Web
-    Web -->|2. API 요청| Server
-    Server -->|3. 데이터 저장| DB
-    
-    %% 흐름 2: QR 스캔
-    User -->|4. QR 코드 스캔| Server
-    Server -->|5. 스캔 로그 저장| DB
-    Server -->|6. 상세 페이지 리다이렉트| Web
-    
-    %% 흐름 3: 피드백
-    Web -->|7. 피드백 제출| Server
-    Server -->|8. 피드백 저장| DB
-    Server -.->|9. 분석 스크립트 실행| Python
-    Python -->|10. 데이터 조회 및 분석| DB
-    Python -->|11. 키워드 결과 저장| DB`;
+    classDef Sky stroke-width:1px, stroke-dasharray:none, stroke:#374D7C, fill:#E2EBFF, color:#374D7C
+    style DB stroke-width:2px,stroke-dasharray: 0
 
             navigator.clipboard.writeText(code).then(() => {
                 const btn = document.querySelector('.copy-btn');
