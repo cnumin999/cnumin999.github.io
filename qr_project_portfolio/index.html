@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR 프로젝트 - 인터랙티브 데이터 흐름도</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* 시스템 아키텍처 */
+        .architecture-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 25px;
+            background: linear-gradient(180deg, #00d4ff, #7b2cbf);
+            border-radius: 2px;
+        }
+
+        /* 아키텍처 박스들 */
+        .arch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .arch-box.client {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .arch-box.server {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .arch-box.database {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .arch-box.python {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .arch-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .arch-box p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .arch-box .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #00d4ff;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* 상세 프로세스 흐름 */
+        .process-section {
+            margin-bottom: 40px;
+        }
+
+        .process-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .process-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .process-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .process-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .process-icon.production { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .process-icon.qc { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .process-icon.qr { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .process-icon.feedback { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+        .process-title {
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        .process-purpose {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* 플로우 스텝 */
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .flow-step::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 30px;
+            bottom: -15px;
+            width: 2px;
+            background: linear-gradient(180deg, #00d4ff, transparent);
+        }
+
+        .flow-step:last-child::before {
+            display: none;
+        }
+
+        .step-number {
+            position: absolute;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background: #00d4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #1a1a2e;
+        }
+
+        .step-content {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .step-type {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .step-type.input { background: #667eea; }
+        .step-type.request { background: #f5576c; }
+        .step-type.process { background: #11998e; }
+        .step-type.save { background: #f093fb; }
+        .step-type.result { background: #00d4ff; color: #1a1a2e; }
+        .step-type.trigger { background: #ff9a00; }
+
+        .step-text {
+            color: #ddd;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .step-detail {
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* DB 테이블 참조 */
+        .db-tables {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        .db-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #f093fb;
+        }
+
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .table-item {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #00d4ff;
+        }
+
+        .table-name {
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .table-desc {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        /* API 엔드포인트 */
+        .api-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 15px;
+        }
+
+        .api-item {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .api-method {
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .api-method.get { background: #11998e; }
+        .api-method.post { background: #667eea; }
+        .api-method.delete { background: #f5576c; }
+
+        .api-path {
+            font-family: 'Courier New', monospace;
+            color: #00d4ff;
+            font-size: 0.9rem;
+        }
+
+        .api-desc {
+            color: #888;
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+
+        /* Mermaid 코드 섹션 */
+        .mermaid-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-block {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+        }
+
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .comment { color: #8b949e; }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 최종 목표 */
+        .goal-section {
+            background: linear-gradient(135deg, rgba(123, 44, 191, 0.3), rgba(0, 212, 255, 0.3));
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .goal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .goal-items {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .goal-item {
+            text-align: center;
+        }
+
+        .goal-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .goal-text {
+            color: #ddd;
+            font-size: 1rem;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .arch-container { flex-direction: column; }
+            .arrow { transform: rotate(90deg); }
+            .api-grid { grid-template-columns: 1fr; }
+        }
+
+        /* 프린트 스타일 */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .process-card, .architecture-section, .api-section, .mermaid-section {
+                background: #f5f5f5;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QR 프로젝트 데이터 흐름도</h1>
+        <p class="subtitle">QR 코드 기반 제품 추적 및 데이터 수집 플랫폼 시스템 아키텍처</p>
+
+        <!-- 1. 전체 시스템 아키텍처 -->
+        <div class="architecture-section">
+            <h2 class="section-title">1. 전체 시스템 아키텍처 (Overview)</h2>
+            <div class="arch-container">
+                <div class="arch-box client">
+                    <div class="icon">&#128101;</div>
+                    <h3>사용자 (Client)</h3>
+                    <p>웹 브라우저<br>생산 관리자 / QC 검사자 / 고객</p>
+                </div>
+                <div class="arrow">&#8594;</div>
+                <div class="arch-box server">
+                    <div class="icon">⚙️</div>
+                    <h3>웹 서버</h3>
+                    <p>Node.js / Express<br>API 처리, 비즈니스 로직</p>
+                </div>
+                <div class="arrow">&#8594;</div>
+                <div class="arch-box database">
+                    <div class="icon">🗄️</div>
+                    <h3>데이터베이스</h3>
+                    <p>MySQL<br>데이터 영구 저장</p>
+                </div>
+                <div class="arrow">&#8596;</div>
+                <div class="arch-box python">
+                    <div class="icon">&#128013;</div>
+                    <h3>분석 엔진</h3>
+                    <p>Python<br>NLP 키워드 분석</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 상세 데이터 흐름 -->
+        <div class="process-section">
+            <h2 class="section-title">2. 상세 데이터 흐름 (Process Flow)</h2>
+
+            <!-- A. 생산 시리얼 관리 -->
+            <div class="process-card">
+                <div class="process-header">
+                    <div class="process-icon production">&#128230;</div>
+                    <div>
+                        <h3 class="process-title">A. 생산 시리얼 생성 및 관리 (Production)</h3>
+                        <p class="process-purpose">목적: 생산 계획을 입력하고 시리얼 번호를 생성하여 DB에 저장</p>
+                    </div>
+                </div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <span class="step-type input">입력</span>
+                            <p class="step-text">관리자가 웹 페이지(producer.html)에서 제품군, 모델명, 수량, 담당자 입력</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <span class="step-type request">요청</span>
+                            <p class="step-text">API 호출</p>
+                            <p class="step-detail">POST /api/admin/production/serial</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <span class="step-type process">처리</span>
+                            <p class="step-text">서버에서 중복 확인 후 데이터 가공 (날짜, 시리얼 번호 생성)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">4</span>
+                        <div class="step-content">
+                            <span class="step-type save">저장</span>
+                            <p class="step-text">DB에 생산 정보 저장</p>
+                            <p class="step-detail">INSERT/UPDATE -> serial_gen_master</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">5</span>
+                        <div class="step-content">
+                            <span class="step-type result">결과</span>
+                            <p class="step-text">저장 완료 메시지 반환 및 목록 갱신</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B. QC 성적서 등록 -->
+            <div class="process-card">
+                <div class="process-header">
+                    <div class="process-icon qc">&#9989;</div>
+                    <div>
+                        <h3 class="process-title">B. QC 성적서 등록 (Quality Control)</h3>
+                        <p class="process-purpose">목적: 제품 검사 결과를 저장하고, 엑셀 성적서를 생성할 준비를 함</p>
+                    </div>
+                </div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <span class="step-type input">입력</span>
+                            <p class="step-text">검사자가 웹 페이지에서 1차/2차/최종 검사 결과 입력</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <span class="step-type request">요청</span>
+                            <p class="step-text">API 호출</p>
+                            <p class="step-detail">POST /api/admin/inspection/report</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <span class="step-type save">저장 1</span>
+                            <p class="step-text">검사 마스터 정보 저장</p>
+                            <p class="step-detail">INSERT/UPDATE -> equipment_master</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">4</span>
+                        <div class="step-content">
+                            <span class="step-type save">저장 2</span>
+                            <p class="step-text">상세 검사 수치 저장</p>
+                            <p class="step-detail">DELETE + INSERT -> inspection_1st, inspection_2nd, inspection_final</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">5</span>
+                        <div class="step-content">
+                            <span class="step-type process">동기화</span>
+                            <p class="step-text">QR 연동을 위해 제품 정보 자동 등록</p>
+                            <p class="step-detail">INSERT/UPDATE -> installed_products</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">6</span>
+                        <div class="step-content">
+                            <span class="step-type result">업데이트</span>
+                            <p class="step-text">QC 상태를 '완료'로 변경</p>
+                            <p class="step-detail">UPDATE serial_gen_master SET qc_inspection = '완료'</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C. QR 스캔 및 추적 -->
+            <div class="process-card">
+                <div class="process-header">
+                    <div class="process-icon qr">&#128241;</div>
+                    <div>
+                        <h3 class="process-title">C. QR 스캔 및 추적 (QR Scan & Tracking)</h3>
+                        <p class="process-purpose">목적: 고객이 QR을 찍었을 때 로그를 남기고 상세 정보를 보여줌</p>
+                    </div>
+                </div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <span class="step-type input">스캔</span>
+                            <p class="step-text">사용자가 스마트폰으로 QR 코드 스캔</p>
+                            <p class="step-detail">http://서버주소/api/scan/qr-scan/:serial_no</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <span class="step-type process">분석</span>
+                            <p class="step-text">서버에서 접속자 IP, 위치(GeoIP), 디바이스 정보 파싱</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <span class="step-type save">기록</span>
+                            <p class="step-text">스캔 이력 저장</p>
+                            <p class="step-detail">INSERT -> scan_logs</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">4</span>
+                        <div class="step-content">
+                            <span class="step-type process">이동</span>
+                            <p class="step-text">사용자를 제품 상세 페이지로 리다이렉트</p>
+                            <p class="step-detail">Redirect -> serial_detail.html</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">5</span>
+                        <div class="step-content">
+                            <span class="step-type result">조회</span>
+                            <p class="step-text">상세 페이지 로딩 시 제품 정보 조회 후 화면 표시</p>
+                            <p class="step-detail">GET /api/product-history/:serial</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- D. 고객 피드백 및 분석 -->
+            <div class="process-card">
+                <div class="process-header">
+                    <div class="process-icon feedback">&#128172;</div>
+                    <div>
+                        <h3 class="process-title">D. 고객 피드백 및 분석 (Feedback Loop)</h3>
+                        <p class="process-purpose">목적: 고객의 불만/의견을 접수하고 Python으로 분석</p>
+                    </div>
+                </div>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <span class="step-type input">제출</span>
+                            <p class="step-text">고객이 상세 페이지에서 피드백(내용, 별점) 작성 후 전송</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <span class="step-type request">요청</span>
+                            <p class="step-text">API 호출</p>
+                            <p class="step-detail">POST /api/feedback</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <span class="step-type save">저장</span>
+                            <p class="step-text">피드백 데이터 저장</p>
+                            <p class="step-detail">INSERT -> feedback, service_history</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">4</span>
+                        <div class="step-content">
+                            <span class="step-type trigger">트리거</span>
+                            <p class="step-text">서버가 백그라운드에서 Python 스크립트 실행</p>
+                            <p class="step-detail">spawn('python', ['run_analysis.py'])</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">5</span>
+                        <div class="step-content">
+                            <span class="step-type process">분석</span>
+                            <p class="step-text">Python이 DB에서 최근 피드백을 읽어 형태소 분석(soynlp) 수행</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <span class="step-number">6</span>
+                        <div class="step-content">
+                            <span class="step-type result">결과</span>
+                            <p class="step-text">분석된 키워드 빈도수를 DB에 저장 (대시보드용)</p>
+                            <p class="step-detail">INSERT/UPDATE -> analysis_keywords</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. DB 테이블 구조 -->
+        <div class="db-tables">
+            <h2 class="db-title">데이터베이스 테이블 구조</h2>
+            <div class="table-grid">
+                <div class="table-item">
+                    <div class="table-name">serial_gen_master</div>
+                    <div class="table-desc">생산 시리얼 마스터 (엑셀 데이터 기반)</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">equipment_master</div>
+                    <div class="table-desc">QC 검사 마스터 정보</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">inspection_1st / 2nd / final</div>
+                    <div class="table-desc">QC 검사 상세 (부품, 성능, 최종)</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">installed_products</div>
+                    <div class="table-desc">제품 설치/납품 이력</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">products</div>
+                    <div class="table-desc">제품 마스터</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">product_categories</div>
+                    <div class="table-desc">제품 카테고리</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">customers</div>
+                    <div class="table-desc">고객사 정보</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">scan_logs</div>
+                    <div class="table-desc">QR 스캔 이력 (IP, 위치, 시간)</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">feedback</div>
+                    <div class="table-desc">고객 피드백</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">analysis_keywords</div>
+                    <div class="table-desc">NLP 분석 결과 (키워드 빈도)</div>
+                </div>
+                <div class="table-item">
+                    <div class="table-name">validations</div>
+                    <div class="table-desc">VD(검증) 정보</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 주요 API 엔드포인트 -->
+        <div class="api-section">
+            <h2 class="section-title">주요 API 엔드포인트</h2>
+            <div class="api-grid">
+                <div class="api-item">
+                    <span class="api-method post">POST</span>
+                    <span class="api-path">/api/admin/production/serial</span>
+                    <span class="api-desc">생산 시리얼 저장</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/admin/production/list</span>
+                    <span class="api-desc">생산 목록 조회</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method post">POST</span>
+                    <span class="api-path">/api/admin/inspection/report</span>
+                    <span class="api-desc">QC 리포트 저장</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/admin/inspection/report/:serial</span>
+                    <span class="api-desc">QC 리포트 조회</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/export/excel/:serial</span>
+                    <span class="api-desc">엑셀 성적서 다운로드</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/scan/qr-scan/:serial</span>
+                    <span class="api-desc">QR 스캔 (로그 기록 + 리다이렉트)</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/product-history/:serial</span>
+                    <span class="api-desc">제품 통합 이력 조회</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method post">POST</span>
+                    <span class="api-path">/api/feedback</span>
+                    <span class="api-desc">피드백 제출</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/api/admin/analysis/keywords</span>
+                    <span class="api-desc">키워드 분석 결과 조회</span>
+                </div>
+                <div class="api-item">
+                    <span class="api-method delete">DELETE</span>
+                    <span class="api-path">/api/admin/production/serial/:serial</span>
+                    <span class="api-desc">생산 데이터 삭제</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Mermaid 다이어그램 코드 -->
+        <div class="mermaid-section">
+            <h2 class="section-title">Mermaid 다이어그램 코드</h2>
+            <p style="color: #888; margin-bottom: 15px;">이 코드를 <a href="https://mermaid.live" target="_blank" style="color: #00d4ff;">Mermaid Live Editor</a>에 붙여넣으면 자동으로 흐름도가 그려집니다.</p>
+            <div class="code-block" id="mermaid-code">
+<span class="keyword">graph</span> TD
+    <span class="comment">%% 사용자 정의</span>
+    User[<span class="string">사용자/관리자</span>]
+    
+    <span class="comment">%% 시스템 구성요소</span>
+    Web[<span class="string">웹 클라이언트</span>]
+    Server[<span class="string">Node.js 서버</span>]
+    DB[(<span class="string">MySQL 데이터베이스</span>)]
+    Python[<span class="string">Python 분석기</span>]
+
+    <span class="comment">%% 흐름 1: 생산/QC</span>
+    User -->|<span class="string">1. 생산/QC 데이터 입력</span>| Web
+    Web -->|<span class="string">2. API 요청</span>| Server
+    Server -->|<span class="string">3. 데이터 저장</span>| DB
+    
+    <span class="comment">%% 흐름 2: QR 스캔</span>
+    User -->|<span class="string">4. QR 코드 스캔</span>| Server
+    Server -->|<span class="string">5. 스캔 로그 저장</span>| DB
+    Server -->|<span class="string">6. 상세 페이지 리다이렉트</span>| Web
+    
+    <span class="comment">%% 흐름 3: 피드백</span>
+    Web -->|<span class="string">7. 피드백 제출</span>| Server
+    Server -->|<span class="string">8. 피드백 저장</span>| DB
+    Server -.->|<span class="string">9. 분석 스크립트 실행</span>| Python
+    Python -->|<span class="string">10. 데이터 조회 및 분석</span>| DB
+    Python -->|<span class="string">11. 키워드 결과 저장</span>| DB
+            </div>
+            <button class="copy-btn" onclick="copyMermaidCode()">코드 복사</button>
+        </div>
+
+        <!-- 6. 최종 목표 -->
+        <div class="goal-section">
+            <h2 class="goal-title">프로젝트 최종 목표</h2>
+            <div class="goal-items">
+                <div class="goal-item">
+                    <div class="goal-icon">&#128202;</div>
+                    <div class="goal-text">데이터 축적<br><small>생산/QC/피드백 데이터 DB화</small></div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">&#128269;</div>
+                    <div class="goal-text">추적성 확보<br><small>제품 전 과정 이력 관리</small></div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">&#128276;</div>
+                    <div class="goal-text">사전 알림<br><small>교체주기 도래 시 알림</small></div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">&#128200;</div>
+                    <div class="goal-text">패턴 분석<br><small>불량 원인 추적 및 예측</small></div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">&#127970;</div>
+                    <div class="goal-text">플랫폼 사업화<br><small>데이터/기술 수수료 비즈니스</small></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function copyMermaidCode() {
+            const code = `graph TD
+    %% 사용자 정의
+    User[사용자/관리자]
+    
+    %% 시스템 구성요소
+    Web[웹 클라이언트]
+    Server[Node.js 서버]
+    DB[(MySQL 데이터베이스)]
+    Python[Python 분석기]
+
+    %% 흐름 1: 생산/QC
+    User -->|1. 생산/QC 데이터 입력| Web
+    Web -->|2. API 요청| Server
+    Server -->|3. 데이터 저장| DB
+    
+    %% 흐름 2: QR 스캔
+    User -->|4. QR 코드 스캔| Server
+    Server -->|5. 스캔 로그 저장| DB
+    Server -->|6. 상세 페이지 리다이렉트| Web
+    
+    %% 흐름 3: 피드백
+    Web -->|7. 피드백 제출| Server
+    Server -->|8. 피드백 저장| DB
+    Server -.->|9. 분석 스크립트 실행| Python
+    Python -->|10. 데이터 조회 및 분석| DB
+    Python -->|11. 키워드 결과 저장| DB`;
+
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '복사 완료!';
+                setTimeout(() => {
+                    btn.textContent = '코드 복사';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
