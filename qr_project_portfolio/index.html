@@ -448,11 +448,17 @@
             }
         }
     </style>
+<!-- Mermaid JS -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "default"
+  });
+</script>
+
 </head>
 <body>
-    <p class="subtitle">
-        요약: 생산 → QC → QR → 고객 → 데이터 분석 → 플랫폼 가치 창출
-    </p>
     <div class="container">
         <h1>QR 프로젝트 데이터 흐름도</h1>
         <p class="subtitle">QR 코드 기반 제품 추적 및 데이터 수집 플랫폼 시스템 아키텍처</p>
@@ -822,39 +828,33 @@
         </div>
 
         <!-- 5. Mermaid 다이어그램 코드 -->
-        <div class="mermaid-section">
-            <h2 class="section-title">Mermaid 다이어그램 코드</h2>
-            <p style="color: #888; margin-bottom: 15px;">이 코드를 <a href="https://mermaid.live" target="_blank" style="color: #00d4ff;">Mermaid Live Editor</a>에 붙여넣으면 자동으로 흐름도가 그려집니다.</p>
-            <div class="code-block" id="mermaid-code">
-<span class="keyword">graph</span> TD
-    <span class="comment">%% 사용자 정의</span>
-    User[<span class="string">사용자/관리자</span>]
-    
-    <span class="comment">%% 시스템 구성요소</span>
-    Web[<span class="string">웹 클라이언트</span>]
-    Server[<span class="string">Node.js 서버</span>]
-    DB[(<span class="string">MySQL 데이터베이스</span>)]
-    Python[<span class="string">Python 분석기</span>]
+       <div class="mermaid-section">
+  <h2 class="section-title">실제 데이터 흐름 다이어그램</h2>
 
-    <span class="comment">%% 흐름 1: 생산/QC</span>
-    User -->|<span class="string">1. 생산/QC 데이터 입력</span>| Web
-    Web -->|<span class="string">2. API 요청</span>| Server
-    Server -->|<span class="string">3. 데이터 저장</span>| DB
-    
-    <span class="comment">%% 흐름 2: QR 스캔</span>
-    User -->|<span class="string">4. QR 코드 스캔</span>| Server
-    Server -->|<span class="string">5. 스캔 로그 저장</span>| DB
-    Server -->|<span class="string">6. 상세 페이지 리다이렉트</span>| Web
-    
-    <span class="comment">%% 흐름 3: 피드백</span>
-    Web -->|<span class="string">7. 피드백 제출</span>| Server
-    Server -->|<span class="string">8. 피드백 저장</span>| DB
-    Server -.->|<span class="string">9. 분석 스크립트 실행</span>| Python
-    Python -->|<span class="string">10. 데이터 조회 및 분석</span>| DB
-    Python -->|<span class="string">11. 키워드 결과 저장</span>| DB
-            </div>
-            <button class="copy-btn" onclick="copyMermaidCode()">코드 복사</button>
-        </div>
+  <div class="mermaid">
+---
+config:
+  theme: default
+  layout: fixed
+  look: neo
+---
+flowchart TB
+    Start(("1. 제품 생산 시작")) --> Admin["관리자: 제품 정보 입력"]
+    Admin -- 생성 요청 --> Server1["서버: 시리얼 번호 생성"]
+    Server1 -- 데이터 저장 --> DB[("데이터베이스")]
+    DB -.-> Inspector["QC 검사자: 성적서 입력"] & Customer["고객: QR 코드 스캔"]
+    Inspector -- 리포트 저장 --> Server2["서버: QC 데이터 연동"]
+    Server2 -- 업데이트 --> DB
+    Customer -- 접속 --> Server3["서버: 위치/로그 기록"]
+    Server3 -- 이력 조회 --> DB
+    DB -- 정보 반환 --> Page["모바일: 상세 페이지 출력"]
+    Page --> Feedback["고객: 피드백 제출"]
+    Feedback -- 전송 --> Server4["서버: 피드백 접수"]
+    Server4 -- 자동 실행 --> Python["파이썬: 텍스트 분석"]
+    Python -- 결과 저장 --> DB
+  </div>
+</div>
+
 
         <!-- 6. 최종 목표 -->
         <div class="goal-section">
