@@ -533,19 +533,22 @@
             }
 
             .goal-items {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
 
-            .goal-item {
-                width: auto;
-            }
+.goal-item {
+    width: calc(50% - 10px);
+    text-align: center;
+}
 
-            .goal-item:last-child {
-                grid-column: 1 / -1;
-                justify-self: center;
-            }
+.goal-item:nth-child(3),
+.goal-item:nth-child(4),
+.goal-item:nth-child(5) {
+    width: calc(33.333% - 10px);
+}
 
             .goal-icon {
                 font-size: 2.5rem;
