@@ -533,11 +533,18 @@
             }
 
             .goal-items {
-                gap: 25px;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
             }
 
             .goal-item {
-                width: 100%;
+                width: auto;
+            }
+
+            .goal-item:last-child {
+                grid-column: 1 / -1;
+                justify-self: center;
             }
 
             .goal-icon {
