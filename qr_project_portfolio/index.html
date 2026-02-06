@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -310,7 +310,7 @@
 
         .api-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 15px;
         }
 
@@ -319,8 +319,9 @@
             padding: 15px;
             border-radius: 10px;
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
         }
 
         .api-method {
@@ -345,7 +346,6 @@
         .api-desc {
             color: #888;
             font-size: 0.8rem;
-            margin-left: auto;
         }
 
         /* Mermaid 코드 섹션 */
@@ -427,20 +427,120 @@
             color: #ddd;
             font-size: 1rem;
         }
+
         .mermaid {
             display: flex;
             justify-content: center;
         }
 
-
-
-
         /* 반응형 */
         @media (max-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            .arch-container { flex-direction: column; }
-            .arrow { transform: rotate(90deg); }
-            .api-grid { grid-template-columns: 1fr; }
+            body {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+                margin-bottom: 25px;
+            }
+
+            /* 아키텍처 */
+            .arch-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+                font-size: 1.5rem;
+            }
+
+            .arch-box {
+                width: 100%;
+                padding: 20px;
+            }
+
+            /* 프로세스 카드 */
+            .process-card {
+                padding: 20px;
+            }
+
+            .process-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .process-title {
+                font-size: 1.1rem;
+            }
+
+            .process-purpose {
+                font-size: 0.85rem;
+            }
+
+            /* 플로우 스텝 */
+            .flow-step {
+                gap: 15px;
+                padding-left: 25px;
+            }
+
+            .step-content {
+                padding: 12px 15px;
+            }
+
+            .step-text {
+                font-size: 0.9rem;
+            }
+
+            .step-detail {
+                font-size: 0.75rem;
+            }
+
+            /* DB 테이블 */
+            .table-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* API */
+            .api-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Mermaid */
+            .mermaid {
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+
+            /* 최종 목표 */
+            .goal-section {
+                padding: 25px 20px;
+            }
+
+            .goal-title {
+                font-size: 1.5rem;
+            }
+
+            .goal-items {
+                gap: 25px;
+            }
+
+            .goal-item {
+                width: 100%;
+            }
+
+            .goal-icon {
+                font-size: 2.5rem;
+            }
+
+            .goal-text {
+                font-size: 0.95rem;
+            }
         }
 
         /* 프린트 스타일 */
@@ -454,141 +554,19 @@
                 border: 1px solid #ddd;
             }
         }
-
-        @media (max-width: 768px) {
-
-  body {
-    padding: 12px;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-  }
-
-  .subtitle {
-    font-size: 0.95rem;
-    margin-bottom: 25px;
-  }
-
-  /* 아키텍처 */
-  .arch-container {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .arrow {
-    transform: rotate(90deg);
-    font-size: 1.5rem;
-  }
-
-  .arch-box {
-    width: 100%;
-    padding: 20px;
-  }
-
-  /* 프로세스 카드 */
-  .process-card {
-    padding: 20px;
-  }
-
-  .process-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .process-title {
-    font-size: 1.1rem;
-  }
-
-  .process-purpose {
-    font-size: 0.85rem;
-  }
-
-  /* 플로우 스텝 */
-  .flow-step {
-    gap: 15px;
-    padding-left: 25px;
-  }
-
-  .step-content {
-    padding: 12px 15px;
-  }
-
-  .step-text {
-    font-size: 0.9rem;
-  }
-
-  .step-detail {
-    font-size: 0.75rem;
-  }
-
-  /* DB 테이블 */
-  .table-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* API */
-  .api-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .api-item {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.api-desc {
-    margin-left: auto;
-}
-
-  /* Mermaid */
-  .mermaid {
-    overflow-x: auto;
-    justify-content: flex-start;
-  }
-
-  /* 최종 목표 */
-  .goal-section {
-    padding: 25px 20px;
-  }
-
-  .goal-title {
-    font-size: 1.5rem;
-  }
-
-  .goal-items {
-    gap: 25px;
-  }
-
-  .goal-item {
-    width: 100%;
-  }
-
-  .goal-icon {
-    font-size: 2.5rem;
-  }
-
-  .goal-text {
-    font-size: 0.95rem;
-  }
-}
-
-
-        
     </style>
-<!-- Mermaid JS -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script>
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: "dark"
-  });
-</script>
-<link rel="stylesheet" href="https://unpkg.com/phosphor-icons@1.4.2/src/css/icons.css">
+
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "dark"
+        });
+    </script>
+    <link rel="stylesheet" href="https://unpkg.com/phosphor-icons@1.4.2/src/css/icons.css">
 </head>
+
 <body>
     <div class="container">
         <h1>QR 프로젝트 데이터 흐름도</h1>
@@ -852,7 +830,7 @@
 
         <!-- 3. DB 주요 테이블 구조 -->
         <div class="db-tables">
-            <h2 class="db-title">데이터베이스 테이블 구조</h2>
+            <h2 class="db-title">데이터베이스 주요 테이블 구조</h2>
             <div class="table-grid">
                 <div class="table-item">
                     <div class="table-name">serial_gen_master</div>
@@ -958,11 +936,10 @@
             </div>
         </div>
 
-        <!-- 5. Mermaid 다이어그램 코드 -->
-       <div class="mermaid-section">
-  <h2 class="section-title">실제 데이터 흐름 다이어그램</h2>
-
-  <div class="mermaid">
+        <!-- 5. Mermaid 다이어그램 -->
+        <div class="mermaid-section">
+            <h2 class="section-title">실제 데이터 흐름 다이어그램</h2>
+            <div class="mermaid">
 flowchart TB
     Start(("1. 제품 생산 시작")) --> Admin["관리자: 제품 정보 입력"]
     Admin -- 생성 요청 --> Server1["서버: 시리얼 번호 생성"]
@@ -980,68 +957,60 @@ flowchart TB
 
     classDef Sky stroke-width:1px, stroke-dasharray:none, stroke:#374D7C, fill:#E2EBFF, color:#374D7C
     style DB stroke-width:2px,stroke-dasharray: 0
-  </div>
-</div>
-
+            </div>
+        </div>
 
         <!-- 6. 최종 목표 -->
-<div class="goal-section">
-  <h2 class="goal-title">프로젝트 최종 목표</h2>
-  <div class="goal-items">
-
-    <div class="goal-item">
-      <div class="goal-icon">
-        <i class="ph-bold ph-database"></i>
-      </div>
-      <div class="goal-text">
-        데이터 축적<br>
-        <small>생산/QC/피드백 데이터 DB화</small>
-      </div>
+        <div class="goal-section">
+            <h2 class="goal-title">프로젝트 최종 목표</h2>
+            <div class="goal-items">
+                <div class="goal-item">
+                    <div class="goal-icon">
+                        <i class="ph-bold ph-database"></i>
+                    </div>
+                    <div class="goal-text">
+                        데이터 축적<br>
+                        <small>생산/QC/피드백 데이터 DB화</small>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">
+                        <i class="ph-bold ph-path"></i>
+                    </div>
+                    <div class="goal-text">
+                        추적성 확보<br>
+                        <small>제품 전 과정 이력 관리</small>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">
+                        <i class="ph-bold ph-bell-ringing"></i>
+                    </div>
+                    <div class="goal-text">
+                        사전 알림<br>
+                        <small>교체주기 도래 시 알림</small>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">
+                        <i class="ph-bold ph-chart-line-up"></i>
+                    </div>
+                    <div class="goal-text">
+                        패턴 분석<br>
+                        <small>불량 원인 추적 및 예측</small>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">
+                        <i class="ph-bold ph-circles-three-plus"></i>
+                    </div>
+                    <div class="goal-text">
+                        플랫폼 사업화<br>
+                        <small>데이터/기술 수수료 비즈니스</small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="goal-item">
-      <div class="goal-icon">
-        <i class="ph-bold ph-path"></i>
-      </div>
-      <div class="goal-text">
-        추적성 확보<br>
-        <small>제품 전 과정 이력 관리</small>
-      </div>
-    </div>
-
-    <div class="goal-item">
-      <div class="goal-icon">
-        <i class="ph-bold ph-bell-ringing"></i>
-      </div>
-      <div class="goal-text">
-        사전 알림<br>
-        <small>교체주기 도래 시 알림</small>
-      </div>
-    </div>
-
-    <div class="goal-item">
-      <div class="goal-icon">
-        <i class="ph-bold ph-chart-line-up"></i>
-      </div>
-      <div class="goal-text">
-        패턴 분석<br>
-        <small>불량 원인 추적 및 예측</small>
-      </div>
-    </div>
-
-    <div class="goal-item">
-      <div class="goal-icon">
-        <i class="ph-bold ph-circles-three-plus"></i>
-      </div>
-      <div class="goal-text">
-        플랫폼 사업화<br>
-        <small>데이터/기술 수수료 비즈니스</small>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
 </body>
 </html>
